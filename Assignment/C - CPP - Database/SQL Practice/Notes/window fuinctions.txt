@@ -1,0 +1,207 @@
+Perfect! Window functions are **super powerful tools in SQL** — especially when working with **analytics, reporting, or dashboards** (like in Superset). Let’s cover:
+
+* ✅ All major **window functions**
+* 📌 What they do
+* 🕒 When & where to use them
+* 🛠️ Example with demo table + output
+
+---
+
+## 📊 Demo Table: `sales`
+
+Let’s use this simplified sales table:
+
+| id | salesperson | region | amount | sale\_date |
+| -- | ----------- | ------ | ------ | ---------- |
+| 1  | Alice       | North  | 1000   | 2024-01-01 |
+| 2  | Bob         | South  | 1200   | 2024-01-02 |
+| 3  | Alice       | North  | 2000   | 2024-01-03 |
+| 4  | Bob         | South  | 800    | 2024-01-04 |
+| 5  | Alice       | North  | 1800   | 2024-01-05 |
+
+---
+
+# 🪟 All Important Window Functions
+
+---
+
+## 1. **`ROW_NUMBER()`**
+
+### ✅ What: Assigns a **unique increasing number** per row **within a partition**.
+
+### 🕒 When to Use:
+
+* To get **first, last, or Nth row**
+* To remove duplicates
+
+```sql
+SELECT *,
+  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS row_num
+FROM sales;
+```
+
+### 🔎 Output:
+
+| id | salesperson | amount | row\_num |
+| -- | ----------- | ------ | -------- |
+| 1  | Alice       | 1000   | 1        |
+| 3  | Alice       | 2000   | 2        |
+| 5  | Alice       | 1800   | 3        |
+| 2  | Bob         | 1200   | 1        |
+| 4  | Bob         | 800    | 2        |
+
+---
+
+## 2. **`RANK()`**
+
+### ✅ What: Ranks rows **with gaps** in case of ties.
+
+### 🕒 When to Use:
+
+* Leaderboards
+* Top-N queries with ties
+
+```sql
+SELECT *,
+  RANK() OVER (PARTITION BY region ORDER BY amount DESC) AS rank_in_region
+FROM sales;
+```
+
+### 🔎 Output:
+
+| salesperson | region | amount | rank\_in\_region |
+| ----------- | ------ | ------ | ---------------- |
+| Alice       | North  | 2000   | 1                |
+| Alice       | North  | 1800   | 2                |
+| Alice       | North  | 1000   | 3                |
+| Bob         | South  | 1200   | 1                |
+| Bob         | South  | 800    | 2                |
+
+---
+
+## 3. **`DENSE_RANK()`**
+
+### ✅ What: Like `RANK()`, but **no gaps** between ranks.
+
+### 🕒 When to Use:
+
+* Same as `RANK()`, but you need compact rank numbers
+
+```sql
+SELECT *,
+  DENSE_RANK() OVER (PARTITION BY region ORDER BY amount DESC) AS dense_rank
+FROM sales;
+```
+
+### 🔎 Output is the same as RANK() **except if there were ties**, ranks would not skip.
+
+---
+
+## 4. **`NTILE(n)`**
+
+### ✅ What: Splits rows into `n` **equal parts (buckets)**.
+
+### 🕒 When to Use:
+
+* Quartiles, deciles, segmentation
+
+```sql
+SELECT *,
+  NTILE(2) OVER (ORDER BY amount DESC) AS income_bracket
+FROM sales;
+```
+
+### 🔎 Output (splits top/bottom 50%):
+
+| salesperson | amount | income\_bracket |
+| ----------- | ------ | --------------- |
+| Alice       | 2000   | 1               |
+| Alice       | 1800   | 1               |
+| Bob         | 1200   | 1               |
+| Alice       | 1000   | 2               |
+| Bob         | 800    | 2               |
+
+---
+
+## 5. **`LAG()`**
+
+### ✅ What: Access **previous row’s value** in the result.
+
+### 🕒 When to Use:
+
+* Compare current vs previous row (e.g., change in sales)
+
+```sql
+SELECT *,
+  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS prev_sale
+FROM sales;
+```
+
+### 🔎 Output:
+
+| id | salesperson | amount | prev\_sale |
+| -- | ----------- | ------ | ---------- |
+| 1  | Alice       | 1000   | NULL       |
+| 3  | Alice       | 2000   | 1000       |
+| 5  | Alice       | 1800   | 2000       |
+| 2  | Bob         | 1200   | NULL       |
+| 4  | Bob         | 800    | 1200       |
+
+---
+
+## 6. **`LEAD()`**
+
+### ✅ What: Access **next row’s value**.
+
+### 🕒 When to Use:
+
+* Compare with future data (e.g., forecast next sale)
+
+```sql
+SELECT *,
+  LEAD(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS next_sale
+FROM sales;
+```
+
+---
+
+## 7. **`SUM() / AVG() / MAX() / MIN()` OVER**
+
+### ✅ What: Running or grouped totals **without GROUP BY**.
+
+### 🕒 When to Use:
+
+* Running totals, moving averages, comparisons
+
+```sql
+SELECT *,
+  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total
+FROM sales;
+```
+
+### 🔎 Output:
+
+| id | salesperson | amount | running\_total |
+| -- | ----------- | ------ | -------------- |
+| 1  | Alice       | 1000   | 1000           |
+| 3  | Alice       | 2000   | 3000           |
+| 5  | Alice       | 1800   | 4800           |
+| 2  | Bob         | 1200   | 1200           |
+| 4  | Bob         | 800    | 2000           |
+
+---
+
+## 🧠 Summary Table
+
+| Function     | Purpose           | Common Use Case                      |
+| ------------ | ----------------- | ------------------------------------ |
+| `ROW_NUMBER` | Unique row count  | First/last rows, removing duplicates |
+| `RANK`       | Rank with gaps    | Leaderboards                         |
+| `DENSE_RANK` | Rank without gaps | Sorted ranks                         |
+| `NTILE(n)`   | Bucketing         | Quartiles, segmentation              |
+| `LAG`        | Previous row      | Change tracking                      |
+| `LEAD`       | Next row          | Forecasting                          |
+| `SUM() OVER` | Running totals    | Cumulative analysis                  |
+
+---
+

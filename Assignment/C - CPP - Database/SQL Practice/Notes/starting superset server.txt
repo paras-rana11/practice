@@ -1,0 +1,22 @@
+C:\superset-venv\Scripts\activate
+
+$env:SUPERSET_CONFIG_PATH = "C:\superset-venv\superset_config.py"
+
+$env:FLASK_APP = "superset"
+
+$env:SUPERSET_CONFIG_PATH = 'C:\superset-venv\superset_config.py'
+
+superset run -p 8088 --with-threads --reload --debugger
+
+
+
+OR
+
+
+
+# script location: c:/superset-venv/
+# .\start_superset.ps1        <-- Script run krne ka command
+
+
+
+

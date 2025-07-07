@@ -1,0 +1,19 @@
+| Command                        | Use case / Description                                           |
+| ------------------------------ | ---------------------------------------------------------------- |
+| `superset db downgrade`        | Database migration ko previous version pe le jana.               |
+| `superset db history`          | Database migrations ki history dekhna.                           |
+| `superset db heads`            | Available database migration heads dikhana.                      |
+| `superset export-datasets`     | Datasets export karne ke liye.                                   |
+| `superset import-datasets`     | Datasets import karne ke liye.                                   |
+| `superset worker`              | Celery worker process start karne ke liye (async tasks ke liye). |
+| `superset cache-clean`         | Superset cache ko clear karne ke liye.                           |
+| `superset refresh-datasources` | Datasources ko refresh karne ke liye.                            |
+| `superset security cleanup`    | Cleanup security settings or expired sessions.                   |
+
+
+Summary:
+Basic commands for setup, run, users creation, DB migration sab common hain.
+
+Advanced commands mostly migration management, cache clearing, export/import ke liye hote hain.
+
+Superset ke backend me Celery use hota hai, toh superset worker command bhi important hoti hai agar async task chalana ho.

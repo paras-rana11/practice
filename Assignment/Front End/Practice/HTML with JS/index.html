@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, JS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            border: 2px solid red;
+            margin: 30px 30px;
+            padding: 30px;
+            background: cyan; /* Default background color */
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction:  column;
+        }
+        .bg-primary {
+            background-color: blueviolet;
+        }
+        .text-success {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello world, This is JavaScript</h1>
+    
+    <div id="firstContainer" class="container">
+        <button id="click">Click Me</button> <br> <br>
+        <p>this is paragraph which is a best para in all multiverse</p>
+    </div>
+
+    <div id="secondContainer" class="container">
+        <p>this is paragraph</p>
+    </div>
+
+    <script>
+        // DOM Manipulation
+        let elem = document.getElementById('click');
+        console.log(elem);  // Logs the button element
+
+        let elemClass = document.getElementsByClassName('container');
+        console.log(elemClass); // Logs both containers
+
+        // Add initial classes to the first container
+        elemClass[0].classList.add('bg-primary');
+        elemClass[0].classList.add('text-success');
+
+        // Logs the inner HTML of the button ("Click Me")
+        console.log(elem.innerHTML);
+
+        // Adding interactivity: toggling the background color on button click
+        let isYellow = false;  // A flag to track the background color state
+
+        elem.addEventListener('click', function() {
+            if (isYellow) {
+                // Change background to the original color (cyan)
+                elemClass[0].style.backgroundColor = 'blueviolet';
+            } else {
+                // Change background to yellow
+                elemClass[0].style.backgroundColor = 'yellow';
+            }
+            isYellow = !isYellow;  // Toggle the flag value
+            console.log('Background color toggled!');
+        });
+    </script>
+</body>
+</html>
