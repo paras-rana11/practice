@@ -1,0 +1,23 @@
+ASTM :
+
+| Code         | Socho jaise...               | Matlab                   |
+| ------------ | ---------------------------- | ------------------------ |
+| `\x05` (ENQ) | Machine knock kar rahi hai   | “Bhai, kuch bhejna hai”  |
+| `\x06` (ACK) | Aap gate khol rahe ho        | “Bhej do”                |
+| `\x02` (STX) | Data ki shuruat              | “Ab main likh raha hoon” |
+| `\x03` (ETX) | Data ka end                  | “Line khatam”            |
+| `\x04` (EOT) | Machine goodbye keh rahi hai | “Mera kaam ho gaya”      |
+| `\x0A` (LF)  | New line                     | “Ek aur line aa gayi”    |
+
+
+
+
+
+HL7 : 
+
+| **Code**          | **Socho jaise...**                | **Matlab**                           |
+| ----------------- | --------------------------------- | ------------------------------------ |
+| `\x0B` (VT)       | Machine bol rahi hai: **"Start"** | HL7 message ki shuruat (Start Block) |
+| `\x1C` (FS)       | Machine bol rahi hai: **"Done"**  | HL7 message ka end (End Block)       |
+| `\x0D` (CR)       | Enter dabaya                      | Line ka end (Segment separator)      |
+| `\x0B...\x1C\x0D` | Full message                      | Message start to end                 |
